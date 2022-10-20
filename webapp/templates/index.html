@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-5">
+    {% for row in rows %}
+      <h3><a href="{{ url_for('news.single_news', news_id=row.id) }}">{{ row.title }}</a></h3>
+      <p><small>{{ row.date.strftime('%d %B %Y') }} | comments: {{ row.comments_count() }}</small></p>
+    <hr>
+    {% endfor %}
+  </div>
+  <div class="col-1"></div>
+  <div class="col-3">
+  {% if weather %}
+    <h5>its {{ weather.temp_C }} degree, feels like {{ weather.FeelsLikeC }}</h5>
+  {% else %}
+    <h5>Service is unavailable</h5>
+  {% endif %}
+  </div>
+</div>
+{% endblock %}
+

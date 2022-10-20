@@ -1,0 +1,6 @@
+env/
+run.sh
+__pycache__/
+create_admin.py
+get_all_news.py
+.idea/
