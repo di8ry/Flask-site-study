@@ -7,6 +7,7 @@ from webapp.user.views import blueprint as user_blueprint
 from webapp.user.models import User
 from flask_migrate import Migrate
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
@@ -26,8 +27,9 @@ def create_app():
 
     return app
 
+
 app = create_app()
 
 # if __name__ == '__main__':
 #     app.run(debug=True)
-#export FLASK_APP=webapp && export FLASK_ENV=development && flask run
+# export FLASK_APP=webapp && export FLASK_ENV=development && flask run

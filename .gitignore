@@ -4,3 +4,4 @@ __pycache__/
 create_admin.py
 get_all_news.py
 .idea/
+webapp/config.py

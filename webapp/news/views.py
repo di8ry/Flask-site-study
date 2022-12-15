@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app, render_template, abort, flash, redirect, request, url_for
 from webapp.news.models import News, Comment
 from webapp.news.utils.weather import get_weather_by_city
-from webapp.news.forms import CommentForm
+from webapp.news.forms import CommentForm, SearchForm
 from flask_login import current_user, login_required
 from webapp.db import db
 
@@ -9,11 +9,15 @@ from webapp.db import db
 blueprint = Blueprint('news', __name__)
 
 
-@blueprint.route('/')
+@blueprint.route('/', methods=['GET', 'POST'])
 def index():
     title = 'Weather'
-    rows = News.query.order_by(News.date.desc()).all()
     weather = get_weather_by_city(current_app.config['WEATHER_DEFAULT_CITY'])
+    if request.method == 'GET':
+        rows = News.query.order_by(News.date.desc()).all()
+    else:
+        search_word = request.form['searched']
+        rows = News.query.filter(News.title.contains(search_word)).all()
     return render_template(
         'index.html',
         weather=weather,
@@ -55,3 +59,37 @@ def add_comment():
     error = list(form.errors.values())[0][0]
     flash(error)
     return redirect(url_for('news.index'))
+
+
+# @blueprint.route('/search', methods=['POST'])
+# def search():
+#     form = SearchForm()
+#     if form.validate_on_submit():
+#         News.searched = form.searched
+#         search_word = request.form['searched']
+#         final_search = News.query.filter(News.title.contains(search_word)).all()
+#         # final_search = News.query.filter(News.title.contains(News.searched)).all()
+#         # final_search = News.query.filter(News.content.like('%' + News.searched + '%'))
+#         # final_search = News.order_by(News.title).all()
+#         return render_template('search.html', form=form, searched=News.searched, final_search=final_search)
+#
+# @blueprint.context_processor
+# def base():
+#     form = SearchForm()
+#     return dict(form=form)
+
+    # search_word = request.form['keyword']
+    # final_search = News.query.filter(News.title.contains(search_word)).all()
+    # print(final_search)
+    # return redirect(url_for('news.index'))
+
+
+# @blueprint.route('/process_search', methods=['POST', 'GET'])
+# def process_search():
+#     search_word = request.form['keyword']
+#     final_search = News.query.filter(News.title.contains(search_word)).all()
+#     if final_search:
+#         return redirect(url_for('news.search'))
+#     flash('Поиск не дал результата')
+#     return redirect(url_for('index'))
+

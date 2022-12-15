@@ -17,3 +17,8 @@ class CommentForm(FlaskForm):
         if not News.query.get(news_id.data):
             raise ValidationError('Новость удалена!')
 
+
+class SearchForm(FlaskForm):
+    searched = StringField('searched', validators=[DataRequired()])
+    submit = SubmitField('submit')
+
